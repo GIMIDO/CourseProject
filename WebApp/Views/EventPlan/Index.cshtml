@@ -1,0 +1,158 @@
+﻿@model WebApp.Models.EventPlanIndexViewModel
+@{
+    ViewBag.Title = "Таблица запланированных мероприятий";
+}
+<script>
+    function changeAddVisibility() {
+        document.getElementById('DeleteEventPlan').style.display = "none";
+        document.getElementById('UpdateEventPlan').style.display = "none";
+        document.getElementById('AddEventPlan').style.display = "block";
+    }
+</script>
+<script>
+    function changeDeleteVisibility() {
+        document.getElementById('DeleteEventPlan').style.display = "block";
+        document.getElementById('UpdateEventPlan').style.display = "none";
+        document.getElementById('AddEventPlan').style.display = "none";
+    }
+</script>
+<script>
+    function changeUpdateVisibility() {
+        document.getElementById('DeleteEventPlan').style.display = "none";
+        document.getElementById('UpdateEventPlan').style.display = "block";
+        document.getElementById('AddEventPlan').style.display = "none";
+    }
+</script>
+
+<H1>@ViewBag.Title:</H1>
+<form method="get">
+    <div>
+        <label class="control-label">Название события:&nbsp;</label>
+        <select name="eventName" class="form-control">
+            @foreach (var elem in Model.FilterEventsNames)
+            {
+                <option>@elem</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label class="control-label">ФИО работника:&nbsp;</label>
+        <select name="emplFIO" class="form-control">
+            @foreach (var elem in Model.FilterEmplFIOs)
+            {
+                <option>@elem</option>
+            }
+        </select>
+    </div>
+    <br />
+    <div>
+        <input type="submit" style="border-color:black;" value="Фильтр" class="btn btn-default" />
+    </div>
+</form>
+<br />
+<table border="1">
+    <thead>
+        <tr>
+            <td>
+                Id
+            </td>
+            <td>
+                Название организации
+            </td>
+            <td>
+                Название события
+            </td>
+            <td>
+                Начало события
+            </td>
+            <td>
+                Конец события
+            </td>
+            <td>
+                Планируемый объем
+            </td>
+            <td>
+                Планируемая стоимость
+            </td>
+            <td>
+                Экономический эффект
+            </td>
+            <td>
+                ФИО работника
+            </td>
+        </tr>
+    </thead>
+    @foreach (var elem in Model.EventPlanViewModels)
+    {
+        <tr>
+            <td>
+                @elem.Id
+            </td>
+            <td>
+                @elem.OrganizationName
+            </td>
+            <td>
+                @elem.EventName
+            </td>
+            <td>
+                @elem.StartDate
+            </td>
+            <td>
+                @elem.EndDate
+            </td>
+            <td>
+                @elem.PlanVolume
+            </td>
+            <td>
+                @elem.PlanCost
+            </td>
+            <td>
+                @elem.EconomicEffect
+            </td>
+            <td>
+                @elem.EmployeeFIO
+            </td>
+        </tr>
+    }
+</table>
+<br />
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       class="btn btn-outline-dark" style="border-color:black;">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        Назад
+    </a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       class="btn btn-outline-dark" style="border-color:black;">
+        Вперед
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}
+<br />
+@if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+{
+    <div>
+        <input type="submit" style="border-color:black;" value="Добавить запись" onclick="changeAddVisibility()" />
+        <input type="submit" style="border-color:black;" value="Удалить запись" onclick="changeDeleteVisibility()" />
+        <input type="submit" style="border-color:black;" value="Изменить запись" onclick="changeUpdateVisibility()" />
+    </div>
+    <hr />
+    @ViewData["Message"]
+    <div>
+        <div id="AddEventPlan" style="display:none;">
+            @{await Html.RenderPartialAsync("_AddEventPlan");}
+        </div>
+        <div id="DeleteEventPlan" style="display:none;">
+            @{await Html.RenderPartialAsync("_DeleteEventPlan");}
+        </div>
+        <div id="UpdateEventPlan" style="display:none;">
+            @{await Html.RenderPartialAsync("_UpdateEventPlan");}
+        </div>
+    </div>
+}

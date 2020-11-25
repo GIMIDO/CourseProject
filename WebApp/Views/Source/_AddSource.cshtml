@@ -1,0 +1,65 @@
+﻿@model WebApp.Models.SourceIndexViewModel
+<h3>
+    Добавление записи
+</h3>
+<hr />
+@using (Html.BeginForm("AddSource", "Source", FormMethod.Post))
+{
+    <div>
+        @Html.LabelFor(m => m.OrganizationName)
+        <div class="col-md-10">
+            <select name="OrganizationName">
+                @foreach (var fio in Model.OrganNames)
+                {
+                    <option>@fio</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.OrganizationFunds)
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.OrganizationFunds)
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.SuperiorOrganizationName)
+        <div class="col-md-10">
+            <select name="SuperiorOrganizationName">
+                @foreach (var name in Model.OrganNames)
+                {
+                    <option>@name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.SuperiorOrganizationFunds)
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.SuperiorOrganizationFunds)
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.MinistryOfEnergyFund)
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.MinistryOfEnergyFund)
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.RepublicBudget)
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.RepublicBudget)
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.LocalBudget)
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.LocalBudget)
+        </div>
+    </div>
+    <div>
+        <div>
+            <input type="submit" class="btn btn-default" value="Добавить" />
+        </div>
+    </div>
+}

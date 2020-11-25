@@ -1,0 +1,115 @@
+﻿@model WebApp.Models.EventIndexViewModel
+@{
+    ViewBag.Title = "Таблица событий";
+}
+<script>
+    function changeAddVisibility() {
+        document.getElementById('DeleteEvent').style.display = "none";
+        document.getElementById('UpdateEvent').style.display = "none";
+        document.getElementById('AddEvent').style.display = "block";
+    }
+</script>
+<script>
+    function changeDeleteVisibility() {
+        document.getElementById('DeleteEvent').style.display = "block";
+        document.getElementById('UpdateEvent').style.display = "none";
+        document.getElementById('AddEvent').style.display = "none";
+    }
+</script>
+<script>
+    function changeUpdateVisibility() {
+        document.getElementById('DeleteEvent').style.display = "none";
+        document.getElementById('UpdateEvent').style.display = "block";
+        document.getElementById('AddEvent').style.display = "none";
+    }
+</script>
+
+<H1>@ViewBag.Title:</H1>
+<form method="get">
+    <div>
+        <label class="control-label">Единицы измерений:&nbsp;</label>
+        <select name="unit" class="form-control">
+            @foreach (var elem in Model.FilterUnits)
+            {
+                <option>@elem</option>
+            }
+        </select>
+    </div>
+    <br />
+    <div>
+        <input type="submit" style="border-color:black;" value="Фильтр" class="btn btn-default" />
+    </div>
+</form>
+<br />
+<div>
+    <table border="1">
+        <thead>
+            <tr>
+                <td>
+                    Id
+                </td>
+                <td>
+                    Название
+                </td>
+                <td>
+                    Тип единицы
+                </td>
+            </tr>
+        </thead>
+        @foreach (var elem in Model.Events)
+        {
+            <tr>
+                <td>
+                    @elem.Id
+                </td>
+                <td>
+                    @elem.Name
+                </td>
+                <td>
+                    @elem.Unit
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<br />
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       class="btn btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        Назад
+    </a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       class="btn btn-outline-dark">
+        Вперед
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}
+<br />
+@if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+{
+    <div>
+        <input type="submit" value="Добавить запись" onclick="changeAddVisibility()" />
+        <input type="submit" value="Удалить запись" onclick="changeDeleteVisibility()" />
+        <input type="submit" value="Изменить запись" onclick="changeUpdateVisibility()" />
+    </div>
+    <hr />
+    @ViewData["Message"]
+    <div>
+        <div id="AddEvent" style="display:none;">
+            @{await Html.RenderPartialAsync("_AddEvent");}
+        </div>
+        <div id="DeleteEvent" style="display:none;">
+            @{await Html.RenderPartialAsync("_DeleteEvent");}
+        </div>
+        <div id="UpdateEvent" style="display:none;">
+            @{await Html.RenderPartialAsync("_UpdateEvent");}
+        </div>
+    </div>
+}

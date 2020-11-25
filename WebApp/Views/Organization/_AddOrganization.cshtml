@@ -1,0 +1,53 @@
+﻿@model WebApp.Models.OrganizationIndexViewModel
+<h3>
+    Добавление записи
+</h3>
+<hr />
+@using (Html.BeginForm("AddOrganization", "Organization", FormMethod.Post))
+{
+    <div>
+        @Html.LabelFor(m => m.Name)
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Name)
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.TypeOfOwnership)
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.TypeOfOwnership)
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.DirectorFIO)
+        <div class="col-md-10">
+            <select name="DirectorFIO">
+                @foreach (var fio in Model.FilterDirectorFIOs)
+                {
+                    <option>@fio</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.MainEnergeticFIO)
+        <div class="col-md-10">
+            <select name="MainEnergeticFIO">
+                @foreach (var fio in Model.EmployeesFIOs)
+                {
+                    <option>@fio</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Address)
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Address)
+        </div>
+    </div>
+    <div>
+        <div>
+            <input type="submit" class="btn btn-default" value="Добавить" />
+        </div>
+    </div>
+}

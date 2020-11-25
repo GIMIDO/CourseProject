@@ -1,0 +1,137 @@
+﻿@model WebApp.Models.OrganizationIndexViewModel
+@{
+    ViewBag.Title = "Таблица организаций";
+}
+<script>
+    function changeAddVisibility() {
+        document.getElementById('DeleteOrganization').style.display = "none";
+        document.getElementById('UpdateOrganization').style.display = "none";
+        document.getElementById('AddOrganization').style.display = "block";
+    }
+</script>
+<script>
+    function changeDeleteVisibility() {
+        document.getElementById('DeleteOrganization').style.display = "block";
+        document.getElementById('UpdateOrganization').style.display = "none";
+        document.getElementById('AddOrganization').style.display = "none";
+    }
+</script>
+<script>
+    function changeUpdateVisibility() {
+        document.getElementById('DeleteOrganization').style.display = "none";
+        document.getElementById('UpdateOrganization').style.display = "block";
+        document.getElementById('AddOrganization').style.display = "none";
+    }
+</script>
+
+<H1>@ViewBag.Title:</H1>
+<form method="get">
+    <div>
+        <label class="control-label">Адрес:&nbsp;</label>
+        <input name="address" class="form-control" />
+    </div>
+    <div>
+        <label class="control-label">ФИО директора:&nbsp;</label>
+        <select name="director" class="form-control">
+            @foreach (var elem in Model.FilterDirectorFIOs)
+            {
+                <option>@elem</option>
+            }
+        </select>
+    </div>
+    <br />
+    <div>
+        <input type="submit" style="border-color:black;" value="Фильтр" class="btn btn-default" />
+    </div>
+</form>
+<br />
+<div>
+    <table border="1">
+        <thead>
+            <tr>
+                <td>
+                    Id
+                </td>
+                <td>
+                    Название организации
+                </td>
+                <td>
+                    Тип владения
+                </td>
+                <td>
+                    ФИО директора
+                </td>
+                <td>
+                    ФИО главного энергетика
+                </td>
+                <td>
+                    Адрес
+                </td>
+            </tr>
+        </thead>
+        @foreach (var elem in Model.OrganizationViewModels)
+        {
+            <tr>
+                <td>
+                    @elem.Id
+                </td>
+                <td>
+                    @elem.Name
+                </td>
+                <td>
+                    @elem.TypeOfOwnership
+                </td>
+                <td>
+                    @elem.DirectorFIO
+                </td>
+                <td>
+                    @elem.MainEnergeticFIO
+                </td>
+                <td>
+                    @elem.Address
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<br />
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       class="btn btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        Назад
+    </a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       class="btn btn-outline-dark">
+        Вперед
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}
+<br />
+@if (User.IsInRole("Admin"))
+{
+    <div>
+        <input type="submit" value="Добавить запись" onclick="changeAddVisibility()" />
+        <input type="submit" value="Удалить запись" onclick="changeDeleteVisibility()" />
+        <input type="submit" value="Изменить запись" onclick="changeUpdateVisibility()" />
+    </div>
+    <hr />
+    @ViewData["Message"]
+    <div>
+        <div id="AddOrganization" style="display:none;">
+            @{await Html.RenderPartialAsync("_AddOrganization");}
+        </div>
+        <div id="DeleteOrganization" style="display:none;">
+            @{await Html.RenderPartialAsync("_DeleteOrganization");}
+        </div>
+        <div id="UpdateOrganization" style="display:none;">
+            @{await Html.RenderPartialAsync("_UpdateOrganization");}
+        </div>
+    </div>
+}

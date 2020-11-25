@@ -1,0 +1,152 @@
+﻿@model WebApp.Models.SourceIndexViewModel
+@{
+    ViewBag.Title = "Таблица источников";
+}
+<script>
+    function changeAddVisibility() {
+        document.getElementById('DeleteSource').style.display = "none";
+        document.getElementById('UpdateSource').style.display = "none";
+        document.getElementById('AddSource').style.display = "block";
+    }
+</script>
+<script>
+    function changeDeleteVisibility() {
+        document.getElementById('DeleteSource').style.display = "block";
+        document.getElementById('UpdateSource').style.display = "none";
+        document.getElementById('AddSource').style.display = "none";
+    }
+</script>
+<script>
+    function changeUpdateVisibility() {
+        document.getElementById('DeleteSource').style.display = "none";
+        document.getElementById('UpdateSource').style.display = "block";
+        document.getElementById('AddSource').style.display = "none";
+    }
+</script>
+
+<H1>@ViewBag.Title:</H1>
+<form method="get">
+    <div>
+        <label class="control-label">Название организации:&nbsp;</label>
+        <select name="organName" class="form-control">
+            @foreach (var elem in Model.FilterOrganNames)
+            {
+                <option>@elem</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label class="control-label">Название вышестоящей организации:&nbsp;</label>
+        <select name="superOrganName" class="form-control">
+            @foreach (var elem in Model.FilterOrganNames)
+            {
+                <option>@elem</option>
+            }
+        </select>
+    </div>
+    <br />
+    <div>
+        <input type="submit" style="border-color:black;" value="Фильтр" class="btn btn-default" />
+    </div>
+</form>
+<br />
+<div>
+    <table border="1">
+        <thead>
+            <tr>
+                <td>
+                    Id
+                </td>
+                <td>
+                    Название организации
+                </td>
+                <td>
+                    Фонд организации
+                </td>
+                <td>
+                    Название вышестоящей организации
+                </td>
+                <td>
+                    Фонд вышестоящей организации
+                </td>
+                <td>
+                    Фонд Министерства Энергетики
+                </td>
+                <td>
+                    Республиканский бюджет
+                </td>
+                <td>
+                    Местный бюджет
+                </td>
+            </tr>
+        </thead>
+        @foreach (var elem in Model.SourceViewModels)
+        {
+            <tr>
+                <td>
+                    @elem.Id
+                </td>
+                <td>
+                    @elem.OrganizationName
+                </td>
+                <td>
+                    @elem.OrganizationFunds
+                </td>
+                <td>
+                    @elem.SuperiorOrganizationName
+                </td>
+                <td>
+                    @elem.SuperiorOrganizationFunds
+                </td>
+                <td>
+                    @elem.MinistryOfEnergyFund
+                </td>
+                <td>
+                    @elem.RepublicBudget
+                </td>
+                <td>
+                    @elem.LocalBudget
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       class="btn btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        Назад
+    </a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       class="btn btn-outline-dark">
+        Вперед
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}
+@if (User.IsInRole("Admin"))
+{
+    <div>
+        <input type="submit" value="Добавить запись" onclick="changeAddVisibility()" />
+        <input type="submit" value="Удалить запись" onclick="changeDeleteVisibility()" />
+        <input type="submit" value="Изменить запись" onclick="changeUpdateVisibility()" />
+    </div>
+    <hr />
+    @ViewData["Message"]
+    <div>
+        <div id="AddSource" style="display:none;">
+            @{await Html.RenderPartialAsync("_AddSource");}
+        </div>
+        <div id="DeleteSource" style="display:none;">
+            @{await Html.RenderPartialAsync("_DeleteSource");}
+        </div>
+        <div id="UpdateSource" style="display:none;">
+            @{await Html.RenderPartialAsync("_UpdateSource");}
+        </div>
+    </div>
+}

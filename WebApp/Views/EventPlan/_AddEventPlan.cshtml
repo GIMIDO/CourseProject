@@ -1,0 +1,70 @@
+﻿@model WebApp.Models.EventPlanIndexViewModel
+<h3>
+    Добавление записи
+</h3>
+<hr />
+@using (Html.BeginForm("AddEventPlan", "EventPlan", FormMethod.Post))
+{
+    <div>
+        @Html.LabelFor(m => m.OrganizationName)
+        <div class="col-md-10">
+            <select name="OrganizationName">
+                @foreach (var name in Model.OrganNames)
+                {
+                    <option>@name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.EventName)
+        <div class="col-md-10">
+            <select name="EventName">
+                @foreach (var fio in Model.EventNames)
+                {
+                    <option>@fio</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.StartDate)
+        <div class="col-md-10">
+            <input type="date" min="2018-01-01" max="2022-01-01" name="StartDate" />
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.PlanVolume)
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.PlanVolume)
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.PlanCost)
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.PlanCost)
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.EconomicEffect)
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.EconomicEffect)
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.EmployeeFIO)
+        <div class="col-md-10">
+            <select name="EmployeeFIO">
+                @foreach (var fio in Model.EmployeesFIOs)
+                {
+                    <option>@fio</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div>
+        <div>
+            <input type="submit" class="btn btn-default" value="Добавить" />
+        </div>
+    </div>
+}

@@ -1,0 +1,30 @@
+﻿@model WebApp.Models.EventIndexViewModel
+<h3>
+    Добавление записи
+</h3>
+<hr />
+@using (Html.BeginForm("AddEvent", "Event", FormMethod.Post))
+{
+    <div>
+        @Html.LabelFor(m => m.Name)
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Name)
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Unit)
+        <div class="col-md-10">
+            <select name="Unit">
+                @foreach (var name in Model.FilterUnits)
+                {
+                    <option>@name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div>
+        <div>
+            <input type="submit" class="btn btn-default" value="Добавить" />
+        </div>
+    </div>
+}
